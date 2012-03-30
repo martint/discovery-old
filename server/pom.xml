@@ -11,7 +11,7 @@
     <parent>
         <groupId>com.proofpoint.platform</groupId>
         <artifactId>rest-server-base</artifactId>
-        <version>0.54</version>
+        <version>0.57</version>
     </parent>
 
     <properties>
@@ -80,14 +80,26 @@
         </dependency>
 
         <dependency>
-            <groupId>com.proofpoint.platform</groupId>
-            <artifactId>cassandra-experimental</artifactId>
-            <version>0.53</version>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-smile</artifactId>
+            <version>1.9.5</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-multibindings</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.iq80.leveldb</groupId>
+            <artifactId>leveldb-api</artifactId>
+            <version>0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.iq80.leveldb</groupId>
+            <artifactId>leveldb</artifactId>
+            <version>0.3</version>
         </dependency>
 
         <!-- Proofpoint platform -->
@@ -129,18 +141,6 @@
         <dependency>
             <groupId>com.proofpoint.platform</groupId>
             <artifactId>jmx</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>me.prettyprint</groupId>
-            <artifactId>hector-core</artifactId>
-            <version>0.8.0-2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- for packaging -->
