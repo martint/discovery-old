@@ -1,6 +1,5 @@
 package com.proofpoint.discovery.store;
 
-import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.proofpoint.discovery.client.ServiceDescriptor;
 import com.proofpoint.discovery.client.ServiceSelector;
@@ -85,7 +84,7 @@ public class Replicator
             }, 0, (long) replicationInterval.toMillis(), TimeUnit.MILLISECONDS);
         }
 
-        // TODO: need failsafe recurrent scheduler with variable delay
+        // TODO: need fail-safe recurrent scheduler with variable delay
     }
 
     @PreDestroy
@@ -95,6 +94,7 @@ public class Replicator
             future.cancel(true);
             executor.shutdownNow();
 
+            executor = null;
             future = null;
         }
     }
@@ -114,7 +114,10 @@ public class Replicator
             }
 
             String uri = descriptor.getProperties().get("http");
-            Preconditions.checkNotNull(uri, "service descriptor for node %s is missing http uri", descriptor.getNodeId());
+            if (uri == null) {
+                log.error("service descriptor for node %s is missing http uri", descriptor.getNodeId());
+                continue;
+            }
 
             // TODO: build URI from resource class
             Request request = RequestBuilder.prepareGet()

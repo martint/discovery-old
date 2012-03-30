@@ -21,6 +21,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.not;
 
+/**
+ * A simple, eventually consistent, fully replicated, distributed key-value store.
+ */
 public class DistributedStore
 {
     private final String name;
@@ -36,6 +39,12 @@ public class DistributedStore
     @Inject
     public DistributedStore(String name, LocalStore localStore, RemoteStore remoteStore, StoreConfig config, Provider<DateTime> timeProvider)
     {
+        Preconditions.checkNotNull(name, "name is null");
+        Preconditions.checkNotNull(localStore, "localStore is null");
+        Preconditions.checkNotNull(remoteStore, "remoteStore is null");
+        Preconditions.checkNotNull(config, "config is null");
+        Preconditions.checkNotNull(timeProvider, "timeProvider is null");
+
         this.name = name;
         this.localStore = localStore;
         this.remoteStore = remoteStore;
@@ -61,12 +70,19 @@ public class DistributedStore
     }
 
     @Managed
+    public String getName()
+    {
+        return name;
+    }
+
+    @Managed
     public long getLastGcTimestamp()
     {
         return lastGcTimestamp.get();
     }
 
-    private void removeExpiredEntries()
+    @Managed
+    public void removeExpiredEntries()
     {
         for (Entry entry : localStore.getAll()) {
             if (isExpired(entry)) {
